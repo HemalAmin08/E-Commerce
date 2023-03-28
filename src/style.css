@@ -1,0 +1,10 @@
+.navbar {
+  background-color: #efefef;
+  height: 60px;
+}
+.wishlistIcon {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  padding: 10px;
+}
