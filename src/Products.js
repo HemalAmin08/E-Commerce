@@ -14,7 +14,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 export default function Products() {
   const [productData, setProductData] = useState([]);
-
+  const [active, setActive] = useState(false);
   const handleProductData = () => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
@@ -23,12 +23,13 @@ export default function Products() {
 
   const handleWishlist = (id) => {
     console.log("id", id);
+    setActive(!active);
   };
 
   useEffect(() => {
     handleProductData();
   }, []);
-  //   console.log(productData, "productData");
+
   return (
     <>
       <Navbar />
@@ -52,6 +53,7 @@ export default function Products() {
                       onClick={() => {
                         handleWishlist(id);
                       }}
+                      style={{ backgroundColor: active ? "black" : "white" }}
                     />
                   </div>
                   <CardMedia
