@@ -11,20 +11,37 @@ import {
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { style } from "@mui/system";
 
 export default function Products() {
   const [productData, setProductData] = useState([]);
-  const [active, setActive] = useState(false);
+  const [productStates, setProductStates] = useState([]);
+
   const handleProductData = () => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
-      .then((json) => setProductData(json));
+      .then((json) => {
+        setProductData(json);
+        setProductStates(
+          json?.map(({ id }) => ({ id: id, active: false })).filter((d) => d)
+        );
+      });
+  };
+  console.log(productData, "pd");
+  const handleWishlist = (id) => {
+    // console.log("id", id);
+    const updatedStates = productStates?.map((data) => {
+      console.log(data, "ddd");
+      if (data.id === id) {
+        return { ...data, active: !data.active };
+      }
+      return data;
+      // console.log(data.id);
+    });
+    setProductStates(updatedStates);
   };
 
-  const handleWishlist = (id) => {
-    console.log("id", id);
-    setActive(!active);
-  };
+  console.log(productStates, "productStates");
 
   useEffect(() => {
     handleProductData();
@@ -45,40 +62,45 @@ export default function Products() {
 
         <Grid container spacing={2}>
           <Grid item xl={3}>
-            {productData.map(({ image, title, price, id }) => (
-              <Card key={id}>
-                <CardActionArea>
-                  <div className="wishlistIcon">
-                    <FavoriteBorderIcon
-                      onClick={() => {
-                        handleWishlist(id);
-                      }}
-                      style={{ backgroundColor: active ? "black" : "white" }}
+            {productData?.length &&
+              productData?.map(({ image, title, price, id }) => (
+                <Card key={id}>
+                  <CardActionArea>
+                    <div className="wishlistIcon">
+                      <FavoriteBorderIcon
+                        onClick={() => {
+                          handleWishlist(id);
+                        }}
+                        // style={{
+                        //   backgroundColor: productStates.active
+                        //     ? "red"
+                        //     : "white",
+                        // }}
+                      />
+                    </div>
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={image}
+                      alt={image}
                     />
-                  </div>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={image}
-                    alt={image}
-                  />
-                  <CardContent
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography gutterBottom variant="h5" component="div">
-                      Title: {title}
-                    </Typography>
-                    <Typography gutterBottom variant="body2" component="div">
-                      Price: {price}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            ))}
+                    <CardContent
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography gutterBottom variant="h5" component="div">
+                        Title: {title}
+                      </Typography>
+                      <Typography gutterBottom variant="body2" component="div">
+                        Price: {price}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              ))}
           </Grid>
         </Grid>
       </Container>
