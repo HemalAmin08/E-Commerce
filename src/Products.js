@@ -46,9 +46,17 @@ export default function Products() {
     handleProductData();
   }, []);
 
+  const activeNumber = [];
+  productStates.map((e) => {
+    if (e.active === true) {
+      activeNumber.push(e.id);
+    }
+  });
+  // console.log(activeNumber, "activeNumber");
+
   return (
     <>
-      <Navbar />
+      <Navbar activeNumber={activeNumber} />
       <Container>
         {/* <Box sx={{ width: "100%", maxWidth: 500, textAlign: "center" }}> */}
         <Typography
@@ -73,7 +81,7 @@ export default function Products() {
                             handleWishlist(id);
                           }}
                           style={{
-                            backgroundColor: findId.active ? "red" : "",
+                            color: findId.active ? "red" : "",
                           }}
                         />
                       </div>
