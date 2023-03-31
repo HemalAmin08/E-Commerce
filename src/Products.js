@@ -22,16 +22,14 @@ export default function Products() {
       .then((res) => res.json())
       .then((json) => {
         setProductData(json);
-        setProductStates(
-          json?.map(({ id }) => ({ id: id, active: false })).filter((d) => d)
-        );
+        setProductStates(json?.map(({ id }) => ({ id: id, active: false })));
       });
   };
-  console.log(productData, "pd");
+  // console.log(productData, "pd");
   const handleWishlist = (id) => {
     // console.log("id", id);
     const updatedStates = productStates?.map((data) => {
-      console.log(data, "ddd");
+      // console.log(data, "ddd");
       if (data.id === id) {
         return { ...data, active: !data.active };
       }
@@ -41,7 +39,8 @@ export default function Products() {
     setProductStates(updatedStates);
   };
 
-  console.log(productStates, "productStates");
+  // console.log(productStates, "productStates");
+  // console.log(productData, "productData");
 
   useEffect(() => {
     handleProductData();
@@ -63,44 +62,49 @@ export default function Products() {
         <Grid container spacing={2}>
           <Grid item xl={3}>
             {productData?.length &&
-              productData?.map(({ image, title, price, id }) => (
-                <Card key={id}>
-                  <CardActionArea>
-                    <div className="wishlistIcon">
-                      <FavoriteBorderIcon
-                        onClick={() => {
-                          handleWishlist(id);
-                        }}
-                        // style={{
-                        //   backgroundColor: productStates.active
-                        //     ? "red"
-                        //     : "white",
-                        // }}
+              productData?.map(({ image, title, price, id }) => {
+                const findId = productStates.find((ele) => ele.id === id);
+                return (
+                  <Card key={id}>
+                    <CardActionArea>
+                      <div className="wishlistIcon">
+                        <FavoriteBorderIcon
+                          onClick={() => {
+                            handleWishlist(id);
+                          }}
+                          style={{
+                            backgroundColor: findId.active ? "red" : "",
+                          }}
+                        />
+                      </div>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={image}
+                        alt={image}
                       />
-                    </div>
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={image}
-                      alt={image}
-                    />
-                    <CardContent
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography gutterBottom variant="h5" component="div">
-                        Title: {title}
-                      </Typography>
-                      <Typography gutterBottom variant="body2" component="div">
-                        Price: {price}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              ))}
+                      <CardContent
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography gutterBottom variant="h5" component="div">
+                          Title: {title}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="body2"
+                          component="div"
+                        >
+                          Price: {price}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                );
+              })}
           </Grid>
         </Grid>
       </Container>
