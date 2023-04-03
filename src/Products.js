@@ -15,48 +15,29 @@ import { style } from "@mui/system";
 
 export default function Products() {
   const [productData, setProductData] = useState([]);
-  const [productStates, setProductStates] = useState([]);
-  const [activeData, setActiveData] = useState([]);
 
   const handleProductData = () => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
       .then((json) => {
-        setProductData(json);
-        setProductStates(
-          json?.map(({ title, id }) => ({
-            title: title,
-            id: id,
-            active: false,
-          }))
+        setProductData(
+          json?.map((obj) => Object.assign(obj, { active: false }))
         );
       });
   };
-  // console.log(productData, "pd");
+
   const handleWishlist = (id) => {
-    // console.log("id", id);
-    const updatedStates = productStates?.map((data) => {
-      // console.log(data, "ddd");
+    const updatedStates = productData?.map((data) => {
       if (data.id === id) {
         return { ...data, active: !data.active };
       }
       return data;
-      // console.log(data.id);
     });
-    setProductStates(updatedStates);
+    setProductData(updatedStates);
   };
 
   // console.log(productStates, "productStates");
-  // console.log(productData, "productData");
-  useEffect(() => {
-    productStates.map((e) => {
-      if (e.active === true) {
-        return setActiveData([...activeData, e.id]);
-      }
-    });
-  }, [productStates]);
-
-  console.log(activeData, "activeData");
+  console.log(productData, "productData");
 
   useEffect(() => {
     handleProductData();
@@ -78,7 +59,7 @@ export default function Products() {
         <Grid container spacing={2}>
           {productData?.length &&
             productData.map(({ image, title, price, id }) => {
-              const findId = productStates.find((ele) => ele.id === id);
+              const findId = productData.find((ele) => ele.id === id);
               return (
                 <Grid item xl={4} key={id}>
                   <Card key={id} sx={{ height: "100%" }}>
