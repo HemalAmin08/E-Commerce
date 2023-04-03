@@ -3,14 +3,13 @@ import "./style.css";
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Navbar({ activeNumber }) {
+export default function Navbar() {
   return (
     <>
       <div className="navbar">
         <Container
           sx={{ display: "flex", alignItems: "center", justifyContent: "end" }}
         >
-          <span>{activeNumber.length}</span>
           <Link to={`/wishlist`}>
             <Button
               variant="outlined"

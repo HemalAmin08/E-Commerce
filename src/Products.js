@@ -16,13 +16,20 @@ import { style } from "@mui/system";
 export default function Products() {
   const [productData, setProductData] = useState([]);
   const [productStates, setProductStates] = useState([]);
+  const [activeData, setActiveData] = useState([]);
 
   const handleProductData = () => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
       .then((json) => {
         setProductData(json);
-        setProductStates(json?.map(({ id }) => ({ id: id, active: false })));
+        setProductStates(
+          json?.map(({ title, id }) => ({
+            title: title,
+            id: id,
+            active: false,
+          }))
+        );
       });
   };
   // console.log(productData, "pd");
@@ -41,22 +48,23 @@ export default function Products() {
 
   // console.log(productStates, "productStates");
   // console.log(productData, "productData");
+  useEffect(() => {
+    productStates.map((e) => {
+      if (e.active === true) {
+        return setActiveData([...activeData, e.id]);
+      }
+    });
+  }, [productStates]);
+
+  console.log(activeData, "activeData");
 
   useEffect(() => {
     handleProductData();
   }, []);
 
-  const activeNumber = [];
-  productStates.map((e) => {
-    if (e.active === true) {
-      activeNumber.push(e.id);
-    }
-  });
-  // console.log(activeNumber, "activeNumber");
-
   return (
     <>
-      <Navbar activeNumber={activeNumber} />
+      <Navbar />
       <Container>
         {/* <Box sx={{ width: "100%", maxWidth: 500, textAlign: "center" }}> */}
         <Typography
@@ -68,12 +76,12 @@ export default function Products() {
         </Typography>
 
         <Grid container spacing={2}>
-          <Grid item xl={3}>
-            {productData?.length &&
-              productData?.map(({ image, title, price, id }) => {
-                const findId = productStates.find((ele) => ele.id === id);
-                return (
-                  <Card key={id}>
+          {productData?.length &&
+            productData.map(({ image, title, price, id }) => {
+              const findId = productStates.find((ele) => ele.id === id);
+              return (
+                <Grid item xl={4} key={id}>
+                  <Card key={id} sx={{ height: "100%" }}>
                     <CardActionArea>
                       <div className="wishlistIcon">
                         <FavoriteBorderIcon
@@ -111,9 +119,9 @@ export default function Products() {
                       </CardContent>
                     </CardActionArea>
                   </Card>
-                );
-              })}
-          </Grid>
+                </Grid>
+              );
+            })}
         </Grid>
       </Container>
     </>
