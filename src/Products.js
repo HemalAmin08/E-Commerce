@@ -8,13 +8,16 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { style } from "@mui/system";
+import DataContext from "./DataContext";
 
 export default function Products() {
+  const dataActive = useContext(DataContext);
   const [productData, setProductData] = useState([]);
+  const [activeItem, setActiveItem] = useState([]);
 
   const handleProductData = () => {
     fetch("https://fakestoreapi.com/products")
@@ -36,8 +39,13 @@ export default function Products() {
     setProductData(updatedStates);
   };
 
-  // console.log(productStates, "productStates");
-  console.log(productData, "productData");
+  useEffect(() => {
+    productData.map((item) => {
+      if (item.active === true) {
+        dataActive.setGlobalState([...dataActive.globalState, item]);
+      }
+    });
+  }, [dataActive, productData]);
 
   useEffect(() => {
     handleProductData();
@@ -47,7 +55,6 @@ export default function Products() {
     <>
       <Navbar />
       <Container>
-        {/* <Box sx={{ width: "100%", maxWidth: 500, textAlign: "center" }}> */}
         <Typography
           variant="h3"
           gutterBottom
