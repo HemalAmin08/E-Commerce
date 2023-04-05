@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable array-callback-return */
 /* eslint-disable no-unused-vars */
 import {
   Card,
@@ -23,9 +25,7 @@ export default function Products() {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
       .then((json) => {
-        setProductData(
-          json?.map((obj) => Object.assign(obj, { active: false }))
-        );
+        setProductData(json?.map((obj) => ({ ...obj, active: false })));
       });
   };
 
@@ -45,7 +45,7 @@ export default function Products() {
         dataActive.setGlobalState([...dataActive.globalState, item]);
       }
     });
-  }, [dataActive, productData]);
+  }, [productData]);
 
   useEffect(() => {
     handleProductData();
@@ -64,52 +64,46 @@ export default function Products() {
         </Typography>
 
         <Grid container spacing={2}>
-          {productData?.length &&
-            productData.map(({ image, title, price, id }) => {
-              const findId = productData.find((ele) => ele.id === id);
-              return (
-                <Grid item xl={4} key={id}>
-                  <Card key={id} sx={{ height: "100%" }}>
-                    <CardActionArea>
-                      <div className="wishlistIcon">
-                        <FavoriteBorderIcon
-                          onClick={() => {
-                            handleWishlist(id);
-                          }}
-                          style={{
-                            color: findId.active ? "red" : "",
-                          }}
-                        />
-                      </div>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image={image}
-                        alt={image}
-                      />
-                      <CardContent
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
+          {productData?.map(({ image, title, price, id, active }) => {
+            return (
+              <Grid item xl={4} key={id}>
+                <Card key={id} sx={{ height: "100%" }}>
+                  <CardActionArea>
+                    <div className="wishlistIcon">
+                      <FavoriteBorderIcon
+                        onClick={() => {
+                          handleWishlist(id);
                         }}
-                      >
-                        <Typography gutterBottom variant="h5" component="div">
-                          Title: {title}
-                        </Typography>
-                        <Typography
-                          gutterBottom
-                          variant="body2"
-                          component="div"
-                        >
-                          Price: {price}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-              );
-            })}
+                        style={{
+                          color: active ? "red" : "",
+                        }}
+                      />
+                    </div>
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={image}
+                      alt={image}
+                    />
+                    <CardContent
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography gutterBottom variant="h5" component="div">
+                        Title: {title}
+                      </Typography>
+                      <Typography gutterBottom variant="body2" component="div">
+                        Price: {price}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            );
+          })}
         </Grid>
       </Container>
     </>
