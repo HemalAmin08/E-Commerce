@@ -15,11 +15,13 @@ import Navbar from "./Navbar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { style } from "@mui/system";
 import DataContext from "./DataContext";
+import "./style.css";
 
 export default function Products() {
   const dataActive = useContext(DataContext);
   const [productData, setProductData] = useState([]);
   const [activeItem, setActiveItem] = useState([]);
+  // const [activeColor, setAciveColor] = useState([]);
 
   const handleProductData = () => {
     fetch("https://fakestoreapi.com/products")
@@ -32,6 +34,12 @@ export default function Products() {
   const handleWishlist = (id) => {
     const updatedStates = productData?.map((data) => {
       if (data.id === id) {
+        const doubleData = dataActive.globalState.filter((g) => {
+          if (!data.active) {
+            return g.id !== id;
+          }
+        });
+        dataActive.setGlobalState(doubleData);
         return { ...data, active: !data.active };
       }
       return data;
@@ -39,8 +47,16 @@ export default function Products() {
     setProductData(updatedStates);
   };
 
+  console.log(dataActive.globalState, "globalstate");
+
   useEffect(() => {
-    productData.map((item) => {
+    dataActive.globalState.map((ele) => {
+      dataActive.setactiveProduct([...dataActive.activeProduct, ele.id]);
+    });
+  }, [dataActive.globalState]);
+
+  useEffect(() => {
+    productData.forEach((item) => {
       if (item.active === true) {
         dataActive.setGlobalState([...dataActive.globalState, item]);
       }
@@ -64,7 +80,7 @@ export default function Products() {
         </Typography>
 
         <Grid container spacing={2}>
-          {productData?.map(({ image, title, price, id, active }) => {
+          {productData?.map(({ image, title, price, id }) => {
             return (
               <Grid item xl={4} key={id}>
                 <Card key={id} sx={{ height: "100%" }}>
@@ -74,9 +90,11 @@ export default function Products() {
                         onClick={() => {
                           handleWishlist(id);
                         }}
-                        style={{
-                          color: active ? "red" : "",
-                        }}
+                        className={
+                          dataActive.activeProduct.includes(id)
+                            ? "redColor"
+                            : ""
+                        }
                       />
                     </div>
                     <CardMedia

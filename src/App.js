@@ -6,9 +6,12 @@ import DataContext from "./DataContext";
 
 export default function App() {
   const [globalState, setGlobalState] = useState([]);
+  const [activeProduct, setactiveProduct] = useState([]);
   return (
     <>
-      <DataContext.Provider value={{ globalState, setGlobalState }}>
+      <DataContext.Provider
+        value={{ globalState, activeProduct, setGlobalState, setactiveProduct }}
+      >
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Products />}></Route>
