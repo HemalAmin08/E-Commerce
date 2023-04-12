@@ -2,6 +2,8 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-unused-vars */
 import {
+  Box,
+  Button,
   Card,
   CardActionArea,
   CardContent,
@@ -31,7 +33,8 @@ export default function Products() {
       });
   };
 
-  const handleWishlist = (id) => {
+  const handleWishlist = (id, active) => {
+    // console.log(active, "active");
     const updatedStates = productData?.map((data) => {
       if (data.id === id) {
         const doubleData = dataActive.globalState.filter((g) => {
@@ -45,15 +48,25 @@ export default function Products() {
       return data;
     });
     setProductData(updatedStates);
+
+    if (dataActive.activeProduct.includes(id)) {
+      const filteredId = dataActive.activeProduct.filter((a) => {
+        return a !== id;
+      });
+      dataActive.setactiveProduct(filteredId);
+    } else {
+      dataActive.setactiveProduct([...dataActive.activeProduct, id]);
+    }
+
+    // if (!active) {
+    //   dataActive.setactiveProduct([...dataActive.activeProduct, id]);
+    // } else if (active) {
+    //   const filteredId = dataActive.activeProduct.filter((a) => {
+    //     return a !== id;
+    //   });
+    //   dataActive.setactiveProduct(filteredId);
+    // }
   };
-
-  console.log(dataActive.globalState, "globalstate");
-
-  useEffect(() => {
-    dataActive.globalState.map((ele) => {
-      dataActive.setactiveProduct([...dataActive.activeProduct, ele.id]);
-    });
-  }, [dataActive.globalState]);
 
   useEffect(() => {
     productData.forEach((item) => {
@@ -80,7 +93,7 @@ export default function Products() {
         </Typography>
 
         <Grid container spacing={2}>
-          {productData?.map(({ image, title, price, id }) => {
+          {productData?.map(({ image, title, price, id, active }) => {
             return (
               <Grid item xl={4} key={id}>
                 <Card key={id} sx={{ height: "100%" }}>
@@ -88,13 +101,13 @@ export default function Products() {
                     <div className="wishlistIcon">
                       <FavoriteBorderIcon
                         onClick={() => {
-                          handleWishlist(id);
+                          handleWishlist(id, active);
                         }}
-                        className={
-                          dataActive.activeProduct.includes(id)
-                            ? "redColor"
-                            : ""
-                        }
+                        style={{
+                          color: dataActive.activeProduct.includes(id)
+                            ? "red"
+                            : "",
+                        }}
                       />
                     </div>
                     <CardMedia
@@ -110,13 +123,14 @@ export default function Products() {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography gutterBottom variant="h5" component="div">
-                        Title: {title}
-                      </Typography>
+                      <Typography gutterBottom>Title: {title}</Typography>
                       <Typography gutterBottom variant="body2" component="div">
                         Price: {price}
                       </Typography>
                     </CardContent>
+                    <Box pl={2} mt="auto" pb={2}>
+                      <Button variant="contained">Add To Cart</Button>
+                    </Box>
                   </CardActionArea>
                 </Card>
               </Grid>

@@ -14,3 +14,19 @@
 .imgWidth {
   width: 100px;
 }
+.cartStyle {
+  display: flex;
+  align-items: center;
+}
+.cart-number {
+  position: absolute;
+  right: 1%;
+  top: 1%;
+  background-color: red;
+  color: white;
+  height: 18px;
+  width: 18px;
+  font-size: 15px;
+  border-radius: 50px;
+}
+
