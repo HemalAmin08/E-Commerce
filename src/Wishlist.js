@@ -7,25 +7,37 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import DataContext from "./DataContext";
 import "./style.css";
 import DeleteForeverSharpIcon from "@mui/icons-material/DeleteForeverSharp";
 
 export default function Wishlist() {
   const activeProductData = useContext(DataContext);
-  console.log(activeProductData, "activeProductData");
+  // console.log(activeProductData, "activeProductData");
 
   // eslint-disable-next-line no-unused-vars
   const handleDeleteWishlist = (e, id) => {
     e.preventDefault();
-
     const wishlistedData = activeProductData.globalState.filter((d) => {
       return d.id !== id;
     });
-
     activeProductData.setGlobalState(wishlistedData);
+    const filteredWishlistProduct = activeProductData.activeProduct.filter(
+      (a) => {
+        return a !== id;
+      }
+    );
+    activeProductData.setactiveProduct(filteredWishlistProduct);
   };
+
+  useEffect(() => {
+    const dataarr = activeProductData.globalState.filter((s) => {
+      return activeProductData.activeProduct.includes(s.id);
+    });
+    activeProductData.setGlobalState(dataarr);
+  }, []);
+
   return (
     <>
       <Container>
