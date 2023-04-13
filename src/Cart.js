@@ -24,7 +24,7 @@ export default function Cart() {
         // setActiveCartProduct(
         const filterData = json?.filter((ele) => {
           console.log(
-            // ele !== cartProducts.globalStateForCartProducts.includes(ele),
+            ele !== cartProducts.globalStateForCartProducts.includes(ele),
             ele.id,
             "ele in filter cart api"
           );
@@ -38,14 +38,14 @@ export default function Cart() {
         // );
       });
   };
-  
-//   const handleCartProduct = (e, id) => {
-//     e.preventDefault();
-//     const cartData = cartProducts.globalState.filter((d) => {
-//       return d.id !== id;
-//     });
-//     cartProducts.setGlobalState(cartData);
-//   };
+
+  //   const handleCartProduct = (e, id) => {
+  //     e.preventDefault();
+  //     const cartData = cartProducts.globalState.filter((d) => {
+  //       return d.id !== id;
+  //     });
+  //     cartProducts.setGlobalState(cartData);
+  //   };
 
   console.log(activeCartProduct, "activeCartProduct");
   useEffect(() => {
