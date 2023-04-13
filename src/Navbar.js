@@ -1,9 +1,12 @@
 import { Button, Container, IconButton } from "@mui/material";
 import "./style.css";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import ShoppingCartSharpIcon from "@mui/icons-material/ShoppingCartSharp";
+import DataContext from "./DataContext";
 export default function Navbar() {
+  const cartProductCount = useContext(DataContext);
+
   return (
     <>
       <div className="navbar">
@@ -25,8 +28,12 @@ export default function Navbar() {
               color="primary"
               sx={{ marginBottom: "-10px", padding: "10%" }}
             >
-              <span className="cart-number">1</span>
-              <ShoppingCartSharpIcon />
+              <span className="cart-number">
+                {cartProductCount.globalStateForCartProducts.length}
+              </span>
+              <Link to={`/cart`}>
+                <ShoppingCartSharpIcon />
+              </Link>
             </IconButton>
           </div>
         </Container>
