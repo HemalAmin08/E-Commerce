@@ -69,7 +69,7 @@ export default function Products() {
     // }
   };
 
-  const handleCart = (id) => {
+  const handleCart = (ele) => {
     // const cartState = productData?.map((val) => {
     //   if (val.id === id) {
     //     const doubleCartData = dataActive.globalStateForCartProducts.filter(
@@ -86,15 +86,15 @@ export default function Products() {
     // });
     // setProductData(cartState);
 
-    if (dataActive.globalStateForCartProducts.includes(id)) {
+    if (dataActive.globalStateForCartProducts.includes(ele.id)) {
       const cartDupId = dataActive.globalStateForCartProducts.filter((m) => {
-        return m !== id;
+        return m !== ele.id;
       });
       dataActive.setGlobalStateForCartProducts(cartDupId);
     } else {
       dataActive.setGlobalStateForCartProducts([
         ...dataActive.globalStateForCartProducts,
-        id,
+        ele,
       ]);
     }
     toast.success("Product added to cart successfully!", {
@@ -127,18 +127,18 @@ export default function Products() {
         </Typography>
 
         <Grid container spacing={2}>
-          {productData?.map(({ image, title, price, id, active }) => {
+          {productData?.map((ele) => {
             return (
-              <Grid item xl={4} key={id}>
-                <Card key={id} sx={{ height: "100%" }}>
+              <Grid item xl={4} key={ele.id}>
+                <Card key={ele.id} sx={{ height: "100%" }}>
                   <CardActionArea>
                     <div className="wishlistIcon">
                       <FavoriteBorderIcon
                         onClick={() => {
-                          handleWishlist(id, active);
+                          handleWishlist(ele.id, ele.active);
                         }}
                         style={{
-                          color: dataActive.activeProduct.includes(id)
+                          color: dataActive.activeProduct.includes(ele.id)
                             ? "red"
                             : "",
                         }}
@@ -147,8 +147,8 @@ export default function Products() {
                     <CardMedia
                       component="img"
                       height="140"
-                      image={image}
-                      alt={image}
+                      image={ele.image}
+                      alt={ele.image}
                     />
                     <CardContent
                       sx={{
@@ -157,16 +157,16 @@ export default function Products() {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography gutterBottom>Title: {title}</Typography>
+                      <Typography gutterBottom>Title: {ele.title}</Typography>
                       <Typography gutterBottom variant="body2" component="div">
-                        Price: {price}
+                        Price: {ele.price}
                       </Typography>
                     </CardContent>
                     <Box pl={2} mt="auto" pb={2}>
                       <Button
                         variant="contained"
                         onClick={() => {
-                          handleCart(id);
+                          handleCart(ele);
                         }}
                       >
                         Add To Cart
