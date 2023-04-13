@@ -18,6 +18,8 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { style } from "@mui/system";
 import DataContext from "./DataContext";
 import "./style.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Products() {
   const dataActive = useContext(DataContext);
@@ -83,7 +85,7 @@ export default function Products() {
     //   return val;
     // });
     // setProductData(cartState);
-    
+
     if (dataActive.globalStateForCartProducts.includes(id)) {
       const cartDupId = dataActive.globalStateForCartProducts.filter((m) => {
         return m !== id;
@@ -95,6 +97,9 @@ export default function Products() {
         id,
       ]);
     }
+    toast.success("Product added to cart successfully!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   };
 
   useEffect(() => {
@@ -166,6 +171,7 @@ export default function Products() {
                       >
                         Add To Cart
                       </Button>
+                      <ToastContainer />
                     </Box>
                   </CardActionArea>
                 </Card>
