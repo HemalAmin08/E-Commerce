@@ -34,7 +34,6 @@ export default function Products() {
   };
 
   const handleWishlist = (id, active) => {
-    // console.log(active, "active");
     const updatedStates = productData?.map((data) => {
       if (data.id === id) {
         const doubleData = dataActive.globalState.filter((g) => {
@@ -66,6 +65,36 @@ export default function Products() {
     //   });
     //   dataActive.setactiveProduct(filteredId);
     // }
+  };
+
+  const handleCart = (id) => {
+    // const cartState = productData?.map((val) => {
+    //   if (val.id === id) {
+    //     const doubleCartData = dataActive.globalStateForCartProducts.filter(
+    //       (z) => {
+    //         if (!val.active) {
+    //           return z.id !== id;
+    //         }
+    //       }
+    //     );
+    //     dataActive.setGlobalStateForCartProducts(doubleCartData);
+    //     return { ...val, active: !val.active };
+    //   }
+    //   return val;
+    // });
+    // setProductData(cartState);
+    
+    if (dataActive.globalStateForCartProducts.includes(id)) {
+      const cartDupId = dataActive.globalStateForCartProducts.filter((m) => {
+        return m !== id;
+      });
+      dataActive.setGlobalStateForCartProducts(cartDupId);
+    } else {
+      dataActive.setGlobalStateForCartProducts([
+        ...dataActive.globalStateForCartProducts,
+        id,
+      ]);
+    }
   };
 
   useEffect(() => {
@@ -129,7 +158,14 @@ export default function Products() {
                       </Typography>
                     </CardContent>
                     <Box pl={2} mt="auto" pb={2}>
-                      <Button variant="contained">Add To Cart</Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          handleCart(id);
+                        }}
+                      >
+                        Add To Cart
+                      </Button>
                     </Box>
                   </CardActionArea>
                 </Card>
