@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Box,
   Card,
@@ -10,46 +12,52 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import DataContext from "./DataContext";
 import DeleteForeverSharpIcon from "@mui/icons-material/DeleteForeverSharp";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 export default function Cart() {
+  const [increaseQuantity, setIncreaseQuantity] = useState(1);
   const cartProducts = useContext(DataContext);
-  const [activeCartProduct, setActiveCartProduct] = useState([]);
-  //   const [singleCartItem, setSingleCartIem] = useState([]);
-  console.log(cartProducts.globalStateForCartProducts, "cartProducts");
 
-  const handleProductAddedToCart = () => {
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => res.json())
-      .then((json) => {
-        // setActiveCartProduct(
-        const filterData = json?.filter((ele) => {
-          console.log(
-            ele !== cartProducts.globalStateForCartProducts.includes(ele),
-            ele.id,
-            "ele in filter cart api"
-          );
-        });
-        setActiveCartProduct(filterData);
-        // .map((item) => {
-        //   //   setSingleCartIem(item);
-        //   console.log(item, "item in map");
-        //   return item.id;
-        // })
-        // );
-      });
+  const handleDeleteCartProduct = (e, id) => {
+    e.preventDefault();
+    const cartProductItem = cartProducts.globalStateForCartProducts.filter(
+      (s) => {
+        return s.id !== id;
+      }
+    );
+    cartProducts.setGlobalStateForCartProducts(cartProductItem);
+
+    const filterCartProductData = cartProducts.cartId.filter((f) => {
+      return f !== id;
+    });
+    cartProducts.setCartId(filterCartProductData);
   };
 
-  //   const handleCartProduct = (e, id) => {
-  //     e.preventDefault();
-  //     const cartData = cartProducts.globalState.filter((d) => {
-  //       return d.id !== id;
-  //     });
-  //     cartProducts.setGlobalState(cartData);
-  //   };
+  const handleIncreaseQuantity = (id) => {
+    console.log(id, "clicked");
+    setIncreaseQuantity((e) => e + 1);
+  };
 
-  console.log(activeCartProduct, "activeCartProduct");
+  const handleDecreaseQuantity = (id) => {
+    console.log(id, "clicked");
+    if (increaseQuantity > 1) {
+      return setIncreaseQuantity((e) => e - 1);
+    } else {
+      return null;
+    }
+  };
+
   useEffect(() => {
-    handleProductAddedToCart();
+    const dataCart = cartProducts.globalStateForCartProducts.filter((x) => {
+      return cartProducts.cartId.includes(x.id);
+    });
+    cartProducts.setGlobalStateForCartProducts(dataCart);
   }, []);
 
   return (
@@ -62,39 +70,61 @@ export default function Cart() {
         >
           Cart Products
         </Typography>
-        <div>
-          <Grid container spacing={2}>
-            <Grid item xl={6} key={Math.random()}>
-              <Card sx={{ display: "flex" }}>
-                <CardMedia></CardMedia>
-                <div>
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <CardContent sx={{ flex: "1 0 auto" }}>
-                      <div>
-                        <Typography variant="h5" component="div">
-                          Title:
-                        </Typography>
-                        <Typography
-                          gutterBottom
-                          variant="body2"
-                          component="div"
-                        >
-                          Price:
-                        </Typography>
-                        {/* <Button variant="outlined">Add To Cart</Button> */}
-                        <DeleteForeverSharpIcon
-                        //   onClick={(e) => {
-                        //     handleCartProduct(e, id);
-                        //   }}
-                        />
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>item(s)</TableCell>
+                <TableCell align="right">quantity</TableCell>
+                <TableCell align="right">price</TableCell>
+                <TableCell align="right">total</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {cartProducts.globalStateForCartProducts.map(
+                ({ price, title, image, id }) => (
+                  <TableRow
+                    key={Math.random()}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      <div className="image-title-style">
+                        <img src={image} alt={image} className="image-width" />
+                        {title}
                       </div>
-                    </CardContent>
-                  </Box>
-                </div>
-              </Card>
-            </Grid>
-          </Grid>
-        </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="span-spacing">
+                        <span
+                          onClick={() => {
+                            handleDecreaseQuantity(id);
+                          }}
+                          className="cursor-style"
+                        >
+                          -
+                        </span>
+                        <span>{increaseQuantity}</span>
+                        <span
+                          onClick={() => {
+                            handleIncreaseQuantity(id);
+                          }}
+                          className="cursor-style"
+                        >
+                          +
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>Rs.{price}</TableCell>
+                    <TableCell>Rs. total</TableCell>
+                  </TableRow>
+                )
+              )}
+              <TableRow>
+                <TableCell>Cart Total</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Container>
     </>
   );

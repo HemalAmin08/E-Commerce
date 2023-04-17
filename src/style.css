@@ -29,4 +29,34 @@
   font-size: 15px;
   border-radius: 50px;
 }
-
+.icon-number-style {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cursor-style {
+  cursor: pointer;
+}
+.price-quantity-style {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.image-width {
+  width: 10%;
+}
+.styling {
+  display: flex;
+}
+.abc {
+  margin-left: 10px;
+}
+.span-spacing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.image-title-style {
+  display: flex;
+  align-items: center;
+}
