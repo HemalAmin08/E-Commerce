@@ -18,9 +18,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { style } from "@mui/system";
 import DataContext from "./DataContext";
 import "./style.css";
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 export default function Products() {
   const dataActive = useContext(DataContext);
   const [productData, setProductData] = useState([]);
@@ -91,12 +93,8 @@ export default function Products() {
       dataActive.setCartId([...dataActive.cartId, ele.id]);
     }
 
-    // toast.success("Product added to cart successfully!", {
-    //   position: toast.POSITION.TOP_RIGHT,
-    // });
+    NotificationManager.success("Product Added To Cart Successfully");
   };
-  // console.log(dataActive.globalState, "wishlist data");
-  // console.log(dataActive.globalStateForCartProducts, "state for cart");
 
   useEffect(() => {
     productData.forEach((item) => {
@@ -167,7 +165,7 @@ export default function Products() {
                       >
                         Add To Cart
                       </Button>
-                      {/* <ToastContainer /> */}
+                      <NotificationContainer />
                     </Box>
                   </CardActionArea>
                 </Card>

@@ -21,11 +21,10 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 export default function Cart() {
-  const [increaseQuantity, setIncreaseQuantity] = useState(1);
+  const [cartProductQuantity, setCartProductQuantity] = useState(1);
   const cartProducts = useContext(DataContext);
 
-  const handleDeleteCartProduct = (e, id) => {
-    e.preventDefault();
+  const handleDeleteCartProduct = (id) => {
     const cartProductItem = cartProducts.globalStateForCartProducts.filter(
       (s) => {
         return s.id !== id;
@@ -39,19 +38,20 @@ export default function Cart() {
     cartProducts.setCartId(filterCartProductData);
   };
 
-  const handleIncreaseQuantity = (id) => {
+  const handleIncreaseQuantity = (e, id) => {
     console.log(id, "clicked");
-    setIncreaseQuantity((e) => e + 1);
+    setCartProductQuantity((e) => e + 1);
   };
 
-  const handleDecreaseQuantity = (id) => {
+  const handleDecreaseQuantity = (e, id) => {
     console.log(id, "clicked");
-    if (increaseQuantity > 1) {
-      return setIncreaseQuantity((e) => e - 1);
+    if (cartProductQuantity > 1) {
+      return setCartProductQuantity((e) => e - 1);
     } else {
       return null;
     }
   };
+  console.log(cartProductQuantity, "cartProductQuantity");
 
   useEffect(() => {
     const dataCart = cartProducts.globalStateForCartProducts.filter((x) => {
@@ -87,26 +87,35 @@ export default function Cart() {
                     key={Math.random()}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">
+                    <TableCell>
                       <div className="image-title-style">
                         <img src={image} alt={image} className="image-width" />
-                        {title}
+                        <div className="title-svg-style">
+                          {title}
+                          <DeleteForeverSharpIcon
+                            className="svg-style"
+                            onClick={() => {
+                              handleDeleteCartProduct(id);
+                            }}
+                          />
+                        </div>
                       </div>
                     </TableCell>
+
                     <TableCell>
                       <div className="span-spacing">
                         <span
-                          onClick={() => {
-                            handleDecreaseQuantity(id);
+                          onClick={(e) => {
+                            handleDecreaseQuantity(e, id);
                           }}
                           className="cursor-style"
                         >
                           -
                         </span>
-                        <span>{increaseQuantity}</span>
+                        <span>{cartProductQuantity}</span>
                         <span
-                          onClick={() => {
-                            handleIncreaseQuantity(id);
+                          onClick={(e) => {
+                            handleIncreaseQuantity(e, id);
                           }}
                           className="cursor-style"
                         >
@@ -115,16 +124,25 @@ export default function Cart() {
                       </div>
                     </TableCell>
                     <TableCell>Rs.{price}</TableCell>
-                    <TableCell>Rs. total</TableCell>
+                    <TableCell>Rs. {cartProductQuantity * price}</TableCell>
                   </TableRow>
                 )
               )}
-              <TableRow>
-                <TableCell>Cart Total</TableCell>
-              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
+        <div className="margin-style">
+          <Card>
+            <CardContent className="cart-total">
+              <Typography variant="subtitle2" gutterBottom>
+                Cart Total
+              </Typography>
+              <Typography variant="p" gutterBottom>
+                15002
+              </Typography>
+            </CardContent>
+          </Card>
+        </div>
       </Container>
     </>
   );

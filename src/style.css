@@ -36,6 +36,16 @@
 }
 .cursor-style {
   cursor: pointer;
+  background-color: black;
+  color: white;
+  height: 30px;
+  width: 30px;
+  border-radius: 50px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 10px;
 }
 .price-quantity-style {
   display: flex;
@@ -59,4 +69,20 @@
 .image-title-style {
   display: flex;
   align-items: center;
+}
+.cart-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.margin-style {
+  margin: 10px;
+}
+.title-svg-style {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.svg-style {
+  margin-right: 91%;
 }
