@@ -11,6 +11,7 @@ export default function App() {
   const [globalStateForCartProducts, setGlobalStateForCartProducts] = useState(
     []
   );
+  const [cartId, setCartId] = useState([]);
   return (
     <>
       <DataContext.Provider
@@ -18,9 +19,11 @@ export default function App() {
           globalState,
           activeProduct,
           globalStateForCartProducts,
+          cartId,
           setGlobalState,
           setactiveProduct,
           setGlobalStateForCartProducts,
+          setCartId,
         }}
       >
         <BrowserRouter>

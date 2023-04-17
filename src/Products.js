@@ -18,15 +18,15 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { style } from "@mui/system";
 import DataContext from "./DataContext";
 import "./style.css";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 export default function Products() {
   const dataActive = useContext(DataContext);
   const [productData, setProductData] = useState([]);
   const [activeItem, setActiveItem] = useState([]);
   // const [activeColor, setAciveColor] = useState([]);
-
+  // console.log(dataActive, "dataActive");
   const handleProductData = () => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
@@ -70,25 +70,9 @@ export default function Products() {
   };
 
   const handleCart = (ele) => {
-    // const cartState = productData?.map((val) => {
-    //   if (val.id === id) {
-    //     const doubleCartData = dataActive.globalStateForCartProducts.filter(
-    //       (z) => {
-    //         if (!val.active) {
-    //           return z.id !== id;
-    //         }
-    //       }
-    //     );
-    //     dataActive.setGlobalStateForCartProducts(doubleCartData);
-    //     return { ...val, active: !val.active };
-    //   }
-    //   return val;
-    // });
-    // setProductData(cartState);
-
-    if (dataActive.globalStateForCartProducts.includes(ele.id)) {
+    if (dataActive.globalStateForCartProducts.includes(ele)) {
       const cartDupId = dataActive.globalStateForCartProducts.filter((m) => {
-        return m !== ele.id;
+        return m !== ele;
       });
       dataActive.setGlobalStateForCartProducts(cartDupId);
     } else {
@@ -97,10 +81,22 @@ export default function Products() {
         ele,
       ]);
     }
-    toast.success("Product added to cart successfully!", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+
+    if (dataActive.cartId.includes(ele.id)) {
+      const filterCart = dataActive.cartId.filter((a) => {
+        return a !== ele.id;
+      });
+      dataActive.setCartId(filterCart);
+    } else {
+      dataActive.setCartId([...dataActive.cartId, ele.id]);
+    }
+
+    // toast.success("Product added to cart successfully!", {
+    //   position: toast.POSITION.TOP_RIGHT,
+    // });
   };
+  // console.log(dataActive.globalState, "wishlist data");
+  // console.log(dataActive.globalStateForCartProducts, "state for cart");
 
   useEffect(() => {
     productData.forEach((item) => {
@@ -171,7 +167,7 @@ export default function Products() {
                       >
                         Add To Cart
                       </Button>
-                      <ToastContainer />
+                      {/* <ToastContainer /> */}
                     </Box>
                   </CardActionArea>
                 </Card>

@@ -14,7 +14,7 @@ import DeleteForeverSharpIcon from "@mui/icons-material/DeleteForeverSharp";
 
 export default function Wishlist() {
   const activeProductData = useContext(DataContext);
-  // console.log(activeProductData, "activeProductData");
+  console.log(activeProductData, "activeProductData");
 
   // eslint-disable-next-line no-unused-vars
   const handleDeleteWishlist = (e, id) => {
@@ -37,7 +37,7 @@ export default function Wishlist() {
     });
     activeProductData.setGlobalState(dataarr);
   }, []);
-
+  
   return (
     <>
       <Container>
