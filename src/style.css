@@ -86,3 +86,25 @@
 .svg-style {
   margin-right: 91%;
 }
+.notification {
+  box-sizing: border-box;
+  padding: 15px 15px 15px 58px;
+  border-radius: 2px;
+  color: #fff;
+  background-color: #ccc;
+  box-shadow: none !important;
+  cursor: pointer;
+  font-size: 1em;
+  line-height: 1.2em;
+  position: relative;
+  opacity: 0.9;
+  margin-top: 15px;
+}
+.cart-empty-style {
+  text-align: center;
+}
+.home-button-style {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}

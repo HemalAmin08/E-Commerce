@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -19,6 +20,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Link } from "react-router-dom";
 
 export default function Cart() {
   const [cartProductQuantity, setCartProductQuantity] = useState(1);
@@ -38,20 +40,21 @@ export default function Cart() {
     cartProducts.setCartId(filterCartProductData);
   };
 
-  const handleIncreaseQuantity = (e, id) => {
-    console.log(id, "clicked");
+  const handleIncreaseQuantity = (id) => {
+    // console.log(id, "clicked");
     setCartProductQuantity((e) => e + 1);
   };
 
-  const handleDecreaseQuantity = (e, id) => {
-    console.log(id, "clicked");
+  const handleDecreaseQuantity = (id) => {
+    // console.log(id, "clicked");
     if (cartProductQuantity > 1) {
       return setCartProductQuantity((e) => e - 1);
     } else {
       return null;
     }
   };
-  console.log(cartProductQuantity, "cartProductQuantity");
+
+  // console.log(cartProducts, "cartProducts");
 
   useEffect(() => {
     const dataCart = cartProducts.globalStateForCartProducts.filter((x) => {
@@ -70,6 +73,11 @@ export default function Cart() {
         >
           Cart Products
         </Typography>
+        <div className="home-button-style">
+          <Link to={`/`}>
+            <Button variant="contained">Back to home</Button>
+          </Link>
+        </div>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -131,18 +139,32 @@ export default function Cart() {
             </TableBody>
           </Table>
         </TableContainer>
-        <div className="margin-style">
+        {cartProducts.cartId.length ? (
+          <div className="margin-style">
+            <Card>
+              <CardContent className="cart-total">
+                <Typography variant="subtitle2" gutterBottom>
+                  Cart Total
+                </Typography>
+                <Typography variant="p" gutterBottom>
+                  15002
+                </Typography>
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
           <Card>
-            <CardContent className="cart-total">
-              <Typography variant="subtitle2" gutterBottom>
-                Cart Total
-              </Typography>
-              <Typography variant="p" gutterBottom>
-                15002
+            <CardContent>
+              <Typography
+                variant="h6"
+                gutterBottom
+                className="cart-empty-style"
+              >
+                Oops! Your Cart Is Empty
               </Typography>
             </CardContent>
           </Card>
-        </div>
+        )}
       </Container>
     </>
   );

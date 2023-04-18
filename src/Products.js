@@ -89,11 +89,11 @@ export default function Products() {
         return a !== ele.id;
       });
       dataActive.setCartId(filterCart);
+      NotificationManager.warning("Product Removed From Cart Successfully");
     } else {
       dataActive.setCartId([...dataActive.cartId, ele.id]);
+      NotificationManager.success("Product Added To Cart Successfully");
     }
-
-    NotificationManager.success("Product Added To Cart Successfully");
   };
 
   useEffect(() => {
@@ -158,7 +158,11 @@ export default function Products() {
                     </CardContent>
                     <Box pl={2} mt="auto" pb={2}>
                       <Button
-                        variant="contained"
+                        variant={
+                          dataActive.cartId.includes(ele.id)
+                            ? "contained"
+                            : "outlined"
+                        }
                         onClick={() => {
                           handleCart(ele);
                         }}
