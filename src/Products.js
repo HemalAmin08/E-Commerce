@@ -72,6 +72,7 @@ export default function Products() {
   };
 
   const handleCart = (ele) => {
+    ele["quantity"] = 1;
     if (dataActive.globalStateForCartProducts.includes(ele)) {
       const cartDupId = dataActive.globalStateForCartProducts.filter((m) => {
         return m !== ele;
