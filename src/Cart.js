@@ -23,9 +23,12 @@ import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 
 export default function Cart() {
-  const [cartProductQuantity, setCartProductQuantity] = useState(1);
   const cartProducts = useContext(DataContext);
+  const [cartProductQuantity, setCartProductQuantity] = useState(
+    cartProducts.globalStateForCartProducts
+  );
 
+  console.log(cartProducts.globalStateForCartProducts, "cartProducts");
   const handleDeleteCartProduct = (id) => {
     const cartProductItem = cartProducts.globalStateForCartProducts.filter(
       (s) => {
@@ -40,21 +43,29 @@ export default function Cart() {
     cartProducts.setCartId(filterCartProductData);
   };
 
-  const handleIncreaseQuantity = (id) => {
-    // console.log(id, "clicked");
-    setCartProductQuantity((e) => e + 1);
+  const handleIncreaseQuantity = (e, id, quantity) => {
+    // e.preventDefault();
+    setCartProductQuantity(
+      cartProductQuantity.map((ele) => {
+        if (ele?.id === id) {
+          ele.quantity += 1;
+        }
+        return ele;
+      })
+    );
   };
 
-  const handleDecreaseQuantity = (id) => {
-    // console.log(id, "clicked");
-    if (cartProductQuantity > 1) {
-      return setCartProductQuantity((e) => e - 1);
-    } else {
-      return null;
-    }
+  const handleDecreaseQuantity = (e, id, quantity) => {
+    // e.preventDefault();
+    setCartProductQuantity(
+      cartProductQuantity.map((ele) => {
+        if (ele?.id === id && ele?.quantity > 1) {
+          ele.quantity -= 1;
+        }
+        return ele;
+      })
+    );
   };
-
-  // console.log(cartProducts, "cartProducts");
 
   useEffect(() => {
     const dataCart = cartProducts.globalStateForCartProducts.filter((x) => {
@@ -62,7 +73,7 @@ export default function Cart() {
     });
     cartProducts.setGlobalStateForCartProducts(dataCart);
   }, []);
-
+  console.log(cartProductQuantity, "cartProductQuantity");
   return (
     <>
       <Container>
@@ -89,53 +100,51 @@ export default function Cart() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {cartProducts.globalStateForCartProducts.map(
-                ({ price, title, image, id }) => (
-                  <TableRow
-                    key={Math.random()}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell>
-                      <div className="image-title-style">
-                        <img src={image} alt={image} className="image-width" />
-                        <div className="title-svg-style">
-                          {title}
-                          <DeleteForeverSharpIcon
-                            className="svg-style"
-                            onClick={() => {
-                              handleDeleteCartProduct(id);
-                            }}
-                          />
-                        </div>
+              {cartProductQuantity.map((e) => (
+                <TableRow
+                  key={Math.random()}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell>
+                    <div className="image-title-style">
+                      <img src={e?.image} className="image-width" />
+                      <div className="title-svg-style">
+                        {e?.title}
+                        <DeleteForeverSharpIcon
+                          className="svg-style"
+                          onClick={() => {
+                            handleDeleteCartProduct(e?.id);
+                          }}
+                        />
                       </div>
-                    </TableCell>
+                    </div>
+                  </TableCell>
 
-                    <TableCell>
-                      <div className="span-spacing">
-                        <span
-                          onClick={(e) => {
-                            handleDecreaseQuantity(e, id);
-                          }}
-                          className="cursor-style"
-                        >
-                          -
-                        </span>
-                        <span>{cartProductQuantity}</span>
-                        <span
-                          onClick={(e) => {
-                            handleIncreaseQuantity(e, id);
-                          }}
-                          className="cursor-style"
-                        >
-                          +
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>Rs.{price}</TableCell>
-                    <TableCell>Rs. {cartProductQuantity * price}</TableCell>
-                  </TableRow>
-                )
-              )}
+                  <TableCell>
+                    <div className="span-spacing">
+                      <span
+                        onClick={(ele) => {
+                          handleDecreaseQuantity(ele, e?.id, e?.quantity);
+                        }}
+                        className="cursor-style"
+                      >
+                        -
+                      </span>
+                      <span>{e?.quantity}</span>
+                      <span
+                        onClick={(ele) => {
+                          handleIncreaseQuantity(ele, e?.id, e?.quantity);
+                        }}
+                        className="cursor-style"
+                      >
+                        +
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell>Rs.{e?.price}</TableCell>
+                  <TableCell>Rs. {Math.ceil(e?.quantity * e?.price)}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
