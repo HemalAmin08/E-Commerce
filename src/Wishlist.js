@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -11,6 +12,7 @@ import React, { useContext, useEffect } from "react";
 import DataContext from "./DataContext";
 import "./style.css";
 import DeleteForeverSharpIcon from "@mui/icons-material/DeleteForeverSharp";
+import { Link } from "react-router-dom";
 
 export default function Wishlist() {
   const activeProductData = useContext(DataContext);
@@ -32,12 +34,12 @@ export default function Wishlist() {
   };
 
   useEffect(() => {
-    const dataarr = activeProductData.globalState.filter((s) => {
+    const dataa = activeProductData.globalState.filter((s) => {
       return activeProductData.activeProduct.includes(s.id);
     });
-    activeProductData.setGlobalState(dataarr);
+    activeProductData.setGlobalState(dataa);
   }, []);
-  
+
   return (
     <>
       <Container>
@@ -48,6 +50,11 @@ export default function Wishlist() {
         >
           My Wishlist
         </Typography>
+        <div className="home-button-style">
+          <Link to={`/`}>
+            <Button variant="contained">Back to home</Button>
+          </Link>
+        </div>
         <div>
           <Grid container spacing={2}>
             {activeProductData.globalState.map(
