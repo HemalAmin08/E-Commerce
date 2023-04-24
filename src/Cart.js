@@ -24,11 +24,11 @@ import { Link } from "react-router-dom";
 
 export default function Cart() {
   const cartProducts = useContext(DataContext);
-  const [cartProductQuantity, setCartProductQuantity] = useState(
-    cartProducts.globalStateForCartProducts
-  );
+  // const [cartProductQuantity, setCartProductQuantity] = useState(
+  //   cartProducts.globalStateForCartProducts
+  // );
 
-  console.log(cartProducts.globalStateForCartProducts, "cartProducts");
+  // console.log(cartProducts.globalStateForCartProducts, "cartProducts");
   const handleDeleteCartProduct = (id) => {
     const cartProductItem = cartProducts.globalStateForCartProducts.filter(
       (s) => {
@@ -43,10 +43,17 @@ export default function Cart() {
     cartProducts.setCartId(filterCartProductData);
   };
 
+  const totalOfCart = cartProducts?.globalStateForCartProducts?.reduce(
+    (prev, cur) => {
+      return prev.quantity * prev.price + cur.quantity * cur.price;
+    }
+  );
+
+  console.log(totalOfCart, "totalOfCart");
+
   const handleIncreaseQuantity = (e, id, quantity) => {
-    // e.preventDefault();
-    setCartProductQuantity(
-      cartProductQuantity.map((ele) => {
+    cartProducts.setGlobalStateForCartProducts(
+      cartProducts?.globalStateForCartProducts?.map((ele) => {
         if (ele?.id === id) {
           ele.quantity += 1;
         }
@@ -56,9 +63,8 @@ export default function Cart() {
   };
 
   const handleDecreaseQuantity = (e, id, quantity) => {
-    // e.preventDefault();
-    setCartProductQuantity(
-      cartProductQuantity.map((ele) => {
+    cartProducts.setGlobalStateForCartProducts(
+      cartProducts?.globalStateForCartProducts?.map((ele) => {
         if (ele?.id === id && ele?.quantity > 1) {
           ele.quantity -= 1;
         }
@@ -67,13 +73,8 @@ export default function Cart() {
     );
   };
 
-  useEffect(() => {
-    const dataCart = cartProducts.globalStateForCartProducts.filter((x) => {
-      return cartProducts.cartId.includes(x.id);
-    });
-    cartProducts.setGlobalStateForCartProducts(dataCart);
-  }, []);
-  console.log(cartProductQuantity, "cartProductQuantity");
+  console.log(cartProducts.globalStateForCartProducts, "cart ptoducts");
+
   return (
     <>
       <Container>
@@ -100,14 +101,14 @@ export default function Cart() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {cartProductQuantity.map((e) => (
+              {cartProducts.globalStateForCartProducts.map((e) => (
                 <TableRow
                   key={Math.random()}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell>
                     <div className="image-title-style">
-                      <img src={e?.image} className="image-width" />
+                      <img src={e?.image} className="image-width" alt="hi" />
                       <div className="title-svg-style">
                         {e?.title}
                         <DeleteForeverSharpIcon
@@ -141,7 +142,7 @@ export default function Cart() {
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell>Rs.{e?.price}</TableCell>
+                  <TableCell>Rs.{Math.ceil(e?.price)}</TableCell>
                   <TableCell>Rs. {Math.ceil(e?.quantity * e?.price)}</TableCell>
                 </TableRow>
               ))}
@@ -156,7 +157,7 @@ export default function Cart() {
                   Cart Total
                 </Typography>
                 <Typography variant="p" gutterBottom>
-                  15002
+                  {Math.ceil(totalOfCart)}
                 </Typography>
               </CardContent>
             </Card>
