@@ -109,7 +109,7 @@ export default function Products() {
     handleProductData();
   }, []);
 
-  // console.log(dataActive, "da");
+  console.log(dataActive, "da");
 
   return (
     <>

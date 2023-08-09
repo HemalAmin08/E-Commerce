@@ -28,7 +28,8 @@ export default function Cart() {
   //   cartProducts.globalStateForCartProducts
   // );
 
-  // console.log(cartProducts.globalStateForCartProducts, "cartProducts");
+  // console.log(cartProducts, "cartProducts");
+
   const handleDeleteCartProduct = (id) => {
     const cartProductItem = cartProducts.globalStateForCartProducts.filter(
       (s) => {
@@ -45,11 +46,14 @@ export default function Cart() {
 
   const totalOfCart = cartProducts?.globalStateForCartProducts?.reduce(
     (prev, cur) => {
-      return prev.quantity * prev.price + cur.quantity * cur.price;
-    }
+      // console.log(prev, "prev");
+      // console.log(cur, "cur");
+      return prev + cur.quantity * cur.price;
+    },
+    0
   );
 
-  console.log(totalOfCart, "totalOfCart");
+  // console.log(totalOfCart, "totalOfCart");
 
   const handleIncreaseQuantity = (e, id, quantity) => {
     cartProducts.setGlobalStateForCartProducts(
@@ -73,7 +77,7 @@ export default function Cart() {
     );
   };
 
-  console.log(cartProducts.globalStateForCartProducts, "cart ptoducts");
+  // console.log(cartProducts.globalStateForCartProducts, "cart ptoducts");
 
   return (
     <>
